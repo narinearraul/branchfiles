@@ -8,14 +8,13 @@
   <name>GitSync</name>
 
   <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-  <vendor email="support@yourcompany.com" url="https://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="narinearraul@gmail.com" url="https://github.com/narinearraul">Git Sync</vendor>
 
   <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
        Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
        Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
   <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    Sync git branch files
   ]]></description>
 
   <!-- Product and plugin compatibility requirements.
@@ -27,4 +26,11 @@
   <extensions defaultExtensionNs="com.intellij">
 
   </extensions>
+  <actions>
+    <action id="com.example.gitsync.GitBranchSync" class="com.example.gitsync.GitBranchSync" text="Open Branch Files"
+            description="Open files that have recent changes on current branch">
+      <add-to-group group-id="ToolsMenu" anchor="first"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl G" second-keystroke="ctrl S"/>
+    </action>
+  </actions>
 </idea-plugin>
