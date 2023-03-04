@@ -31,9 +31,10 @@ public class GitBranchSync extends AnAction {
     public void actionPerformed(@NotNull AnActionEvent event) {
         // Get Current project setup...
         Project currentProject = event.getProject();
+        assert currentProject != null;
         VirtualFile baseDir = currentProject.getBaseDir();
         if(baseDir == null) return;
-        int LIMIT=2;
+        int LIMIT=6;
         String basePath = baseDir.getPath();
         FileEditorManager manager = FileEditorManager.getInstance(currentProject);
 
@@ -63,9 +64,22 @@ public class GitBranchSync extends AnAction {
                     "main" // TODO change to default branch
             );
 
-            // Change into set
-            Set<String> latestDiffSet = new HashSet<>(latestDiff);
-            List<String> latestDiffList = new ArrayList<>(latestDiffSet);
+            List<VirtualFile> latestDiffList = new ArrayList<>();
+            Set<String> latestDiffSet = new HashSet<>();
+            VirtualFile tempFile;
+
+            for(String pathDiff: latestDiff) {
+                if(!latestDiffSet.contains(pathDiff)){
+                    tempFile = findFile(pathDiff, baseDir);
+                    if(tempFile != null){
+                        latestDiffSet.add(pathDiff);
+                        latestDiffList.add(tempFile);
+                        if(latestDiffSet.size() == LIMIT){
+                            break;
+                        }
+                    }
+                }
+            }
 
             // Close currently open saved files
             System.out.println("Closing currently open files...");
@@ -76,25 +90,21 @@ public class GitBranchSync extends AnAction {
 
             // Open Files
             System.out.println("Opening Files...");
-            int relativePathStartIndex = basePath.length() + 1;
-            VirtualFile vFile;
-
-            for(String fileAbsolutePath: latestDiffList.subList(0, LIMIT)){
-                String tempFileName = "";
-
-                if(fileAbsolutePath.contains(baseDir.getName() + "/")){
-                    System.out.println("HAS /: " + fileAbsolutePath);
-                    tempFileName = fileAbsolutePath.substring(relativePathStartIndex);
-                }
-                vFile = baseDir.findFileByRelativePath(tempFileName);
-
-                if(vFile != null){
-                    new OpenFileDescriptor(currentProject, vFile).navigate(true);
-                }
+            for(VirtualFile file: latestDiffList){
+                new OpenFileDescriptor(currentProject, file).navigate(true);
             }
         } catch (VcsException e) {
             System.out.println("THERE IS AN ERROR, WELL FIX IT");
             throw new RuntimeException(e);
         }
+    }
+
+    private VirtualFile findFile(String fileAbsolutePath, VirtualFile baseDir) {
+        String tempFileName = "";
+        int relativePathStartIndex = baseDir.getPath().length() + 1;
+        if(fileAbsolutePath.contains(baseDir.getName() + "/")){
+            tempFileName = fileAbsolutePath.substring(relativePathStartIndex);
+        }
+        return baseDir.findFileByRelativePath(tempFileName);
     }
 }
