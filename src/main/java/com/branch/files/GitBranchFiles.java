@@ -1,4 +1,4 @@
-package com.example.gitsync;
+package com.branch.files;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class GitBranchSync extends AnAction {
+public class GitBranchFiles extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent event) {

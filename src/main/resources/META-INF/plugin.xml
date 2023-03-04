@@ -1,20 +1,20 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
   <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-  <id>com.example.GitSync</id>
+  <id>com.branch.files</id>
 
   <!-- Public plugin name should be written in Title Case.
        Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-  <name>GitSync</name>
+  <name>Branch Files</name>
 
   <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-  <vendor email="narinearraul@gmail.com" url="https://github.com/narinearraul">Git Sync</vendor>
+  <vendor email="narinearraul@gmail.com" url="https://github.com/narinearraul">Branch Files</vendor>
 
   <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
        Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
        Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
   <description><![CDATA[
-    Sync git branch files
+    Open recently updated git branch files
   ]]></description>
 
   <!-- Product and plugin compatibility requirements.
@@ -27,7 +27,7 @@
 
   </extensions>
   <actions>
-    <action id="com.example.gitsync.GitBranchSync" class="com.example.gitsync.GitBranchSync" text="Open Branch Files"
+    <action id="com.branch.files.GitBranchFiles" class="com.branch.files.GitBranchFiles" text="Open Branch Files"
             description="Open files that have recent changes on current branch">
       <add-to-group group-id="ToolsMenu" anchor="first"/>
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl G" second-keystroke="ctrl S"/>

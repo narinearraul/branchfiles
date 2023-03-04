@@ -4,7 +4,7 @@ plugins {
   id("idea")
 }
 
-group = "com.example.gitsync"
+group = "com.branch.files"
 version = "1.0-SNAPSHOT"
 
 repositories {
