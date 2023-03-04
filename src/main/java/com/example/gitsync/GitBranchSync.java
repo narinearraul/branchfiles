@@ -20,11 +20,18 @@ public class GitBranchSync extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent event) {
-        // Using the event, evaluate the context,
-        // and enable or disable the action.
-        // System.out.println("Things to do before action");
-        // TODO Make sure git is installed - disable if not
-        // TODO Make sure project directory is a git repo - disable if not
+        // Make sure project directory is a git repo - disable if not
+        Project currentProject = event.getProject();
+        GitRepositoryManager gitRepositoryManager = GitRepositoryManager.getInstance(currentProject);
+        List<GitRepository> repositories = gitRepositoryManager.getRepositories();
+
+        if(repositories.size() == 0){
+            System.out.println("No Git repo found, plugin will be disabled");
+            event.getPresentation().setEnabled(false);
+        } else {
+            System.out.println("Git repo found, plugin will be enabled");
+            event.getPresentation().setEnabled(true);
+        }
     }
 
     @Override
@@ -34,8 +41,7 @@ public class GitBranchSync extends AnAction {
         assert currentProject != null;
         VirtualFile baseDir = currentProject.getBaseDir();
         if(baseDir == null) return;
-        int LIMIT=6;
-        String basePath = baseDir.getPath();
+        int LIMIT=6; //TODO can make this input based
         FileEditorManager manager = FileEditorManager.getInstance(currentProject);
 
         // Git Things...
@@ -101,7 +107,8 @@ public class GitBranchSync extends AnAction {
 
     private VirtualFile findFile(String fileAbsolutePath, VirtualFile baseDir) {
         String tempFileName = "";
-        int relativePathStartIndex = baseDir.getPath().length() + 1;
+        String basePath = baseDir.getPath();
+        int relativePathStartIndex = basePath.length() + 1;
         if(fileAbsolutePath.contains(baseDir.getName() + "/")){
             tempFileName = fileAbsolutePath.substring(relativePathStartIndex);
         }
