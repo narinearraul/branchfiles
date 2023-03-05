@@ -25,12 +25,22 @@ public class GitBranchFiles extends AnAction {
         GitRepositoryManager gitRepositoryManager = GitRepositoryManager.getInstance(currentProject);
         List<GitRepository> repositories = gitRepositoryManager.getRepositories();
 
-        if(repositories.size() == 0){
-            System.out.println("No Git repo found, plugin will be disabled");
+        if(repositories.size() != 1){
+            System.out.println("BranchFiles: No Git repo found, plugin will be disabled");
             event.getPresentation().setEnabled(false);
         } else {
-            System.out.println("Git repo found, plugin will be enabled");
-            event.getPresentation().setEnabled(true);
+            GitRepository currentRepo;
+            String currentBranchName;
+            System.out.println("BranchFiles: Git repo found, checking branch");
+            currentRepo = repositories.get(0);
+            currentBranchName = currentRepo.getCurrentBranch().getName();
+            // If we are on default branch, plugin is disabled (no diff)
+            if(currentBranchName.equals(getDefaultBranchName(currentRepo))){
+                System.out.println("BranchFiles: on default branch, no diff");
+                event.getPresentation().setEnabled(false);
+            } else {
+                event.getPresentation().setEnabled(true);
+            }
         }
     }
 
@@ -53,21 +63,15 @@ public class GitBranchFiles extends AnAction {
         if(repositories.size() == 1){
             currentRepo = repositories.get(0);
             currentBranchName = currentRepo.getCurrentBranch().getName();
-            System.out.println("Current Branches: " + currentRepo.getBranches());
-            System.out.println("Current current branch name: " + currentBranchName);
         } else return;
 
-        GitBranchesCollection localBranches = currentRepo.getBranches();
-//        if(localBranches.findLocalBranch("main") != null){
-//            System.out.println("THERE IS A MAIN");
-//        }
         try {
             // Get Latest Git diff
             final Collection<String> latestDiff = GitUtil.getPathsDiffBetweenRefs(
                     Git.getInstance(),
                     currentRepo,
                     currentBranchName,
-                    "main" // TODO change to default branch
+                    getDefaultBranchName(currentRepo)
             );
 
             List<VirtualFile> latestDiffList = new ArrayList<>();
@@ -76,6 +80,7 @@ public class GitBranchFiles extends AnAction {
 
             for(String pathDiff: latestDiff) {
                 if(!latestDiffSet.contains(pathDiff)){
+                    System.out.println("BranchFiles: path diff " + pathDiff);
                     tempFile = findFile(pathDiff, baseDir);
                     if(tempFile != null){
                         latestDiffSet.add(pathDiff);
@@ -88,19 +93,15 @@ public class GitBranchFiles extends AnAction {
             }
 
             // Close currently open saved files
-            System.out.println("Closing currently open files...");
-            VirtualFile currentOpenFiles[] = manager.getOpenFiles();
-            for(VirtualFile currentOpenFile: currentOpenFiles){
-                manager.closeFile(currentOpenFile);
-            }
+            closeCurrentlyOpenFiles(currentProject);
 
             // Open Files
-            System.out.println("Opening Files...");
+            System.out.println("BranchFiles: Opening Recent Branch Files...");
             for(VirtualFile file: latestDiffList){
                 new OpenFileDescriptor(currentProject, file).navigate(true);
             }
         } catch (VcsException e) {
-            System.out.println("THERE IS AN ERROR, WELL FIX IT");
+            System.out.println("BranchFiles: error while trying to open files" + e);
             throw new RuntimeException(e);
         }
     }
@@ -113,5 +114,30 @@ public class GitBranchFiles extends AnAction {
             tempFileName = fileAbsolutePath.substring(relativePathStartIndex);
         }
         return baseDir.findFileByRelativePath(tempFileName);
+    }
+
+    private static void closeCurrentlyOpenFiles(Project currentProject) {
+        System.out.println("BranchFiles: Closing currently open files...");
+        FileEditorManager manager = FileEditorManager.getInstance(currentProject);
+        VirtualFile currentOpenFiles[] = manager.getOpenFiles();
+        for(VirtualFile currentOpenFile: currentOpenFiles){
+            manager.closeFile(currentOpenFile);
+        }
+    }
+
+    private String getDefaultBranchName(GitRepository currentRepo) {
+        String defaultBranchToUse;
+        // check for "main" to exist if not use "master"
+        GitBranchesCollection localBranches = currentRepo.getBranches();
+        if(localBranches.findLocalBranch("main") != null){
+            defaultBranchToUse = "main";
+        } else {
+            defaultBranchToUse = "master";
+        }
+        System.out.println(String.format("BranchFiles: using branch %s as default", defaultBranchToUse));
+
+        // TODO Can I find default branch name from git manager?
+        // TODO maybe user input of which branch to diff on? then fallback on main/master
+        return defaultBranchToUse;
     }
 }
