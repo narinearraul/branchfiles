@@ -8,7 +8,7 @@
   <name>Branch Files</name>
 
   <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-  <vendor email="narinearraul@gmail.com" url="https://github.com/narinearraul">Branch Files</vendor>
+  <vendor email="narinearraul@gmail.com" url="https://github.com/narinearraul/branchfiles">Branch Files</vendor>
 
   <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
        Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.

@@ -1,1 +1,1 @@
-rootProject.name = "GitSync"
+rootProject.name = "BranchFiles"
