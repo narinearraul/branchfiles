@@ -8,11 +8,10 @@ that are different from the default branch of the git repo since there is no dif
 
 Available in the Tools menu: Tools -> Open Branch Files
 
-![branchFiles.png](..%2F..%2FDesktop%2FbranchFiles.png)
+![branchFiles](https://user-images.githubusercontent.com/2958046/222947484-02650c27-21a4-476f-9799-d6e7a39cf9ce.png)
+
+
 
 ## Prerequisites 
 - Project needs to be a git repository
 - Current branch needs to be different from the deafult branch (plugin diffs based on default branch)
-
-
-## 
