@@ -14,7 +14,28 @@
        Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
        Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
   <description><![CDATA[
-    Open recently updated git branch files
+    <p>
+      This plugin will close the files currently open in the IDE and open 6 (not customizable yet for Beta) of the last modified files in the current branch. Note currently BranchFiles only supports current branches that are different from the default branch of the git repo since there is no diff.
+
+      Available in the Tools menu: Tools -> Open Branch Files
+    </p>
+    <img width="158" height="122" src="https://user-images.githubusercontent.com/2958046/222947484-02650c27-21a4-476f-9799-d6e7a39cf9ce.png" />
+    <p><b>Prerequisites:</b><br>
+    <ul>
+        <li>Project needs to be a git repository</li>
+        <li>Current branch needs to be different from the deafult branch (plugin diffs based on default branch)</li>
+    </ul>
+    </p><br>
+    <p><b>Installation steps:</b><br>
+    <ul>
+        <li>Install a compatible JetBrains IDE, such as IntelliJ IDEA, CLion, PyCharm, or other IntelliJ-based IDEs</li>
+        <li>Launch the IDE and open plugin settings</li>
+        <li>Search for Branch Files and click install</li>
+        <li>After completing installation, make sure the "Open Branch Files" prompt shows up under the Tools Tab (Note: this might be disabled/enabled depending on the current project open in the IDE. </li>
+        <li>Open a project that is a git repository</li>
+        <li>If on default (main/master) branch, change to a different branch that has diff-s from default. This is how the plugin determines which files to show.</li>
+    </ul>
+    </p><br>
   ]]></description>
 
   <!-- Product and plugin compatibility requirements.
@@ -27,7 +48,7 @@
 
   </extensions>
   <actions>
-    <action id="com.branch.files.GitBranchFiles" class="com.branch.files.GitBranchFiles" text="Open Branch Files"
+    <action id="GitBranchFiles" class="com.branch.files.GitBranchFiles" text="Open Branch Files"
             description="Open files that have recent changes on current branch">
       <add-to-group group-id="ToolsMenu" anchor="first"/>
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl G" second-keystroke="ctrl S"/>
