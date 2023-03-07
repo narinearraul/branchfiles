@@ -5,8 +5,8 @@
 ## Description
 
 This plugin will close the files currently open in the IDE and open 6 (not customizable yet for Beta) 
-of the last modified files in the current branch. Note currently BranchFiles only supports current branches
-that are different from the default branch of the git repo since there is no diff. 
+of the last modified files in the current branch. Note currently BranchFiles only supports branches
+other than the default branch (main/master) that have diff-s from the default branch. 
 
 Available in the Tools menu: Tools -> Open Branch Files
 
@@ -27,3 +27,4 @@ Available in the Tools menu: Tools -> Open Branch Files
 ## Prerequisites 
 - Project needs to be a git repository
 - Current branch needs to be different from the deafult branch (plugin diffs based on default branch)
+- Current branch will need to have modified files - diff from default branch
