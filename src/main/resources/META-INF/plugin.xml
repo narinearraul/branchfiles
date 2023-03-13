@@ -19,7 +19,6 @@
 
       Available in the Tools menu: Tools -> Open Branch Files
     </p>
-    <img width="158" height="122" src="https://user-images.githubusercontent.com/2958046/222947484-02650c27-21a4-476f-9799-d6e7a39cf9ce.png" />
     <p><b>Prerequisites:</b><br>
     <ul>
         <li>Project needs to be a git repository</li>
